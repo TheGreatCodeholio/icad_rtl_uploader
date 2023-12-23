@@ -8,7 +8,7 @@ from lib.audio_file_handler import create_json, convert_mp3_m4a, archive_files, 
 from lib.logging_handler import CustomLogger
 from lib.openmhz_handler import upload_to_openmhz
 from lib.rdio_handler import upload_to_rdio
-
+from lib.icad_tone_detect_handler import upload_to_icad
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Process Arguments.')
@@ -107,9 +107,18 @@ def main():
         logger.error("Could Not Create Call Data JSON")
         exit(1)
 
-    logger.debug(call_data)
-
     # TODO Some Sort of Check For Duplicate Transmissions based on timestamp and length
+
+    # Upload to iCAD Tone Detect
+    if system_config["icad_tone_detect"]["enabled"] == 1:
+        if call_data.get("talkgroup", 0) not in system_config["icad_tone_detect"]["talkgroups"]:
+            logger.info(f"Not Sending to Tone Detect API not in talkgroups.")
+        else:
+            upload_success = upload_to_icad(system_config["icad_tone_detect"], mp3_path, call_data)
+            if not upload_success:
+                logger.error("Failed to upload to iCAD API Server.")
+            else:
+                logger.info(f"Successfully uploaded to iCAD API server: {system_config['icad_tone_detect']['icad_url']}")
 
     # Upload to RDIO
     for rdio in system_config["rdio_systems"]:

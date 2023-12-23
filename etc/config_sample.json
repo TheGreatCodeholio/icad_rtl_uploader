@@ -18,7 +18,7 @@
         "short_name": "example",
         "api_key": "example-api-key"
       },
-      "icad_detect_api": {
+      "icad_tone_detect": {
         "enabled": 0,
         "talkgroups": [100],
         "icad_url": "https://detect.example.com/tone_detect",

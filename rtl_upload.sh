@@ -1,7 +1,7 @@
 #! /bin/bash
 
-cd /home/example/icad_rtl_uploader
-python3 airband_uploader.py ${1} ${2}
+cd /home/example/icad_rtl_uploader # Replace this with the path of icad_rtl_uploader
+python3 rtl_uploader.py ${1} ${2}
 status=$?
 
 # Exit with 0 status, even if there is an error.

@@ -119,7 +119,7 @@ Here is a run down of the options in the uploader configuration file `etc/config
 
 If you have multiple systems, you can add multiple to the json configuration:
 ```json
-systems": {
+"systems": {
   "system-1": {
   }, 
   "system-2": {

@@ -19,12 +19,30 @@ For use with RTL_Airband modifed to run scripts after a file has been recorded. 
 
 ### Installation
 
-```
+```bash
 git clone https://github.com/TheGreatCodeholio/icad_rtl_uploader.git
 cd icad_rtl_uploader
 pip3 install -r requirements.txt
 chmod +x rtl_upload.sh
 ```
+
+### Python Virtual Environment
+Instead of installing python libraries globally, it's recommended to use a virtual environment. You can then run the rtl_upload script in that virtual environment.
+
+```bash
+git clone https://github.com/TheGreatCodeholio/icad_rtl_uploader.git
+cd icad_rtl_uploader
+python -m venv env
+. env/bin/activate
+pip3 install -r requirements.txt
+deactivate
+chmod +x rtl_upload.sh
+```
+
+If you do use a virtual environment, modify rtl_upload.sh and change the python command to:
+
+`/your/path/icad_rtl_uploader/env/bin/python3 rtl_uploader.py ${1} ${2}`
+
 
 ### Configuration
 
@@ -48,7 +66,7 @@ In the frequency block for each frequency.
    split_on_transmission = True;
    silence_release = 2.0;
    minimum_length = 1.0;
-   external_script = "/home/adminlocal/icad_rtl_uploader/upload.sh example-system"
+   external_script = "/home/adminlocal/icad_rtl_uploader/rtl_upload.sh example-system";
    squelch_threshold = -30;
    include_freq = true;
 }
@@ -99,9 +117,28 @@ Here is a run down of the options in the uploader configuration file `etc/config
 }
 ```
 
+If you have multiple systems, you can add multiple to the json configuration:
+```json
+"systems": {
+  "system-1": {
+  }, 
+  "system-2": {
+  }
+}
+```
+
 ### Bash Script
 `rtl_upload.sh` Used to jumpstart Python from BASH. RTL Airband modification only supports running BASH scripts.
 **Modify the rtl_upload.sh** to fit your needs and that should be the target of `external_script` in the RTL Airband Configuration.
+
+EXAMPLE:
+```bash
+cd /home/example/icad_rtl_uploader
+```
+REPLACE WITH:
+```bash
+cd /home/tom/git/icad_rtl_uploader
+```
 
 
 

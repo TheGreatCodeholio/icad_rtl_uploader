@@ -49,11 +49,12 @@ If you do use a virtual environment, modify rtl_upload.sh and change the python 
 ##### RTL Airband Configuration Example
 
 In the frequency block for each frequency. 
-`split_on_transmission = True;` must be enabled. Splits transmission after `silence_release` time.
+`split_on_transmission = True;` must be enabled. Splits transmission after `transmission_delay` time.
 `include_freq = True;` must be enabled. Adds frequency to filename. Needed to parse `example_channels.csv` for talkgroup info.
 
-* `silence_release` - How long to wait for next transmission before ending current recording.
-* `minimum_length` - How long the file must be in seconds to be kept. 
+* `transmission_delay` - How long to wait for next transmission before ending current recording. (Default: 0.5)
+* `minimum_transmission` - How long the file must be in seconds to be kept. (Default: 0.5)
+* `max_transmission` - Maximum length before file is split in to multiple transmissions. (Default: 3600)
 * `external_script` - Path to BASH script to run. Followed by a space and the system name. System name is used in uploader config to differentiate settings for each system. 
 
 ##### Example Output Config
@@ -64,8 +65,9 @@ In the frequency block for each frequency.
    directory = "/home/adminlocal/bc_recordings";
    filename_template = "example-system";
    split_on_transmission = True;
-   silence_release = 2.0;
-   minimum_length = 1.0;
+   transmission_delay = 2.0;
+   minimum_transmission = 1.0;
+   max_transmission = 3600;
    external_script = "/home/adminlocal/icad_rtl_uploader/rtl_upload.sh example-system";
    squelch_threshold = -30;
    include_freq = true;
@@ -89,6 +91,10 @@ Here is a run down of the options in the uploader configuration file `etc/config
 * * * * `enabled` - 0 Disabled, 1 Enabled. Enable/Disable Uploading to OpenMHZ
 * * * * `short_name` - Short Name for your system. (Established on OpenMHZ)
 * * * * `api_key` - API Key for OpenMHZ
+* * * `icad_tone_detect` - Configuration for uploading to iCAD Tone Detection
+* * * * `enabled` - 0 Disabled, 1 Enabled. Enable/Disable Uploading to iCAD Tone Detection
+* * * * `talkgroups` - List of integer talkgroup ids to send to iCAD Tone Detection [100, 150]
+* * * * `icad_url` - URL for iCAD Tone Detection
 
 #### Example Config
 ```json
@@ -129,7 +135,7 @@ If you have multiple systems, you can add multiple to the json configuration:
 
 ### Bash Script
 `rtl_upload.sh` Used to jumpstart Python from BASH. RTL Airband modification only supports running BASH scripts.
-**Modify the rtl_upload.sh** to fit your needs and that should be the target of `external_script` in the RTL Airband Configuration.
+**Rename and modify the rtl_upload.sh** to fit your needs and that should be the target of `external_script` in the RTL Airband Configuration.
 
 EXAMPLE:
 ```bash
